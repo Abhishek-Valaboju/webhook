@@ -91,11 +91,8 @@ func (a *admitter) Admit(request *admission.Request) (*admissionv1.AdmissionResp
 
 	if request.Operation == admissionv1.Create {
 		response, err := a.isRejectedLocalUser("create", newUser)
-		if err != nil {
-			return nil, err
-		}
-		if response != nil {
-			return response, nil
+		if response != nil || err != nil {
+			return response, err
 		}
 
 		// Verify that the chosen name, if any, is unique.
@@ -110,11 +107,8 @@ func (a *admitter) Admit(request *admission.Request) (*admissionv1.AdmissionResp
 	fieldPath := field.NewPath("user")
 	if request.Operation == admissionv1.Update {
 		response, err := a.isRejectedLocalUser("update", newUser)
-		if err != nil {
-			return nil, err
-		}
-		if response != nil {
-			return response, nil
+		if response != nil || err != nil {
+			return response, err
 		}
 
 		if err := validateUpdateFields(oldUser, newUser, fieldPath); err != nil {
@@ -135,11 +129,8 @@ func (a *admitter) Admit(request *admission.Request) (*admissionv1.AdmissionResp
 	}
 	if request.Operation == admissionv1.Delete {
 		response, err := a.isRejectedLocalUser("delete", oldUser)
-		if err != nil {
-			return nil, err
-		}
-		if response != nil {
-			return response, nil
+		if response != nil || err != nil {
+			return response, err
 		}
 
 		if oldUser.Name == request.UserInfo.Username {
