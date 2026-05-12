@@ -199,7 +199,7 @@ func (a *admitter) checkUsernameUniqueness(username string) (*admissionv1.Admiss
 }
 
 func (a *admitter) isRejectedLocalUser(operation string, user *v3.User) (*admissionv1.AdmissionResponse, error) {
-	// Check state of `local` auth provider. we are only relevant when it is disabled
+	// Check state of `local` auth provider. It's only relevant when it is disabled
 	disabled, err := a.isLocalAuthProviderDisabled()
 	if err != nil {
 		return nil, err
